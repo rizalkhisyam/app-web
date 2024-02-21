@@ -1,13 +1,13 @@
 <script setup>
-import RegisterForm from '../components/login/RegisterForm.vue'
+import Register from '../components/login/RegisterForm.vue'
 </script>
 
 <template>
   <main>
     <div class="container">
       <div class="row box-web">
-        <div class="col-lg-6">
-          <RegisterForm />
+        <div class="col-lg-4">
+          <Register />
         </div>
       </div>
     </div>

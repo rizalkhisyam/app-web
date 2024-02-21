@@ -6,7 +6,7 @@
                 <p>Silahkan lengkapi data berikut untuk melakukan pendaftaran</p>
             </div>
             <div class="form-section">
-                <form @submit.prevent="register">
+                <Form @formSubmit="register()">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Email</label>
                         <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="email">
@@ -23,28 +23,35 @@
                     <div class="sub-text">
                         <p><router-link to="/">Back to login</router-link></p>
                     </div>
-                </form>
+                </Form>
             </div>
         </div>
     </div>
 </template>
 
-<script>
-export default {
-    data(){
-        return {
-            email: '',
-            password: '',
-            c_password: ''
-        }
-    },
+<script setup>
+//this is Composition API
+import { inject } from 'vue'
+import Form from '../component_layouts/form.vue'
 
-    methods: {
-        async register(){
-            console.log("regis user");
-        }
-    }
+const email = ''
+const password = ''
+const c_password = ''
+const swal = inject('$swal');
+
+const register = async () => {
+    console.log("oke");
+    swal.fire({
+        icon: 'success',
+        toast: true,
+        title: 'Register Success !',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        position: 'top-end',
+    });
 }
+
 </script>
 
 <style scoped>

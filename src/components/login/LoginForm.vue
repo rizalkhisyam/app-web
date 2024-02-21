@@ -6,7 +6,7 @@
                 <p>Silahkan masuk menggunakan akun anda</p>
             </div>
             <div class="form-section">
-                <form>
+                <Form @formSubmit="login()">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Email</label>
                         <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="email">
@@ -19,18 +19,37 @@
                     <div class="sub-text">
                         <p>Don't have account yet ? <router-link to="/register">Register</router-link></p>
                     </div>
-                </form>
+                </Form>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+//this is options API
+import Form from '../component_layouts/form.vue'
 export default {
+    components: {
+        Form
+    },
     data(){
         return {
             email: '',
             password: ''
+        }
+    },
+
+    methods: {
+        async login() {
+            this.$swal.fire({
+                toast: true,
+                icon: 'success',
+                title: 'Login Succcess !',
+                showConfirmButton: false,
+                position: 'top-end',
+                timer: 2000,
+                timerProgressBar: true,
+            })
         }
     }
 }

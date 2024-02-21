@@ -1,13 +1,13 @@
 <script setup>
-import LoginForm from '../components/login/LoginForm.vue'
+import Login from '../components/login/LoginForm.vue'
 </script>
 
 <template>
   <main>
     <div class="container">
       <div class="row box-web">
-        <div class="col-lg-6">
-          <LoginForm />
+        <div class="col-lg-4">
+          <Login />
         </div>
       </div>
     </div>
