@@ -6,10 +6,6 @@
 
 <script setup>
 
-const props = defineProps({
-
-})
-
 const emit = defineEmits([
     'formSubmit'
 ])

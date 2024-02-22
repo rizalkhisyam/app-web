@@ -8,16 +8,19 @@
             <div class="form-section">
                 <Form @formSubmit="register()">
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="email">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="text" class="form-control" id="email" aria-describedby="emailHelp" v-model="formData.email">
+                        <div v-for="error in v$.email.$errors" :key="error.$uid" id="emailHelp" class="form-text text-danger">*{{error.$message}}</div>
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" v-model="password">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" aria-describedby="passHelp" v-model="formData.password">
+                        <div v-for="error in v$.password.$errors" :key="error.$uid" id="passHelp" class="form-text text-danger">*{{error.$message}}</div>
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputPassword2" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword2" v-model="c_password">
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" id="confirmPassword" aria-describedby="cpassHelp" v-model="formData.confirmPassword">
+                        <div v-for="error in v$.confirmPassword.$errors" :key="error.$uid" id="cpassHelp" class="form-text text-danger">*{{error.$message}}</div>
                     </div>
                     <button type="submit" class="btn btn-primary">Register</button>
                     <div class="sub-text">
@@ -31,25 +34,61 @@
 
 <script setup>
 //this is Composition API
-import { inject } from 'vue'
+import { computed, inject, reactive, ref } from 'vue'
 import Form from '../component_layouts/form.vue'
-
-const email = ''
-const password = ''
-const c_password = ''
+import useVuelidate from '@vuelidate/core'
+import { required, email, sameAs, minLength, helpers } from '@vuelidate/validators'
+ 
 const swal = inject('$swal');
+const formData = reactive({
+    email: '',
+    password: '',
+    confirmPassword: ''
+})
+
+const rules = computed(() => {
+    return {
+        email: { 
+            required: helpers.withMessage('This email cannot be empty', required), 
+            email 
+        },
+        password: { 
+            required: helpers.withMessage('This password cannot be empty', required), 
+            minLength: minLength(8) 
+        },
+        confirmPassword: { 
+            required: helpers.withMessage('This confirm password cannot be empty', required), 
+            sameAs: sameAs(formData.password) 
+        }
+    }
+})
+
+const v$ = useVuelidate(rules, formData);
 
 const register = async () => {
-    console.log("oke");
-    swal.fire({
-        icon: 'success',
-        toast: true,
-        title: 'Register Success !',
-        showConfirmButton: false,
-        timer: 2000,
-        timerProgressBar: true,
-        position: 'top-end',
-    });
+    const result = await v$.value.$validate();
+    if(result){
+        swal.fire({
+            icon: 'success',
+            toast: true,
+            title: 'Register Success !',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            position: 'top-end',
+        });
+    }else {
+        swal.fire({
+            icon: 'error',
+            toast: true,
+            title: 'Registration failed !',
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+            position: 'top-end',
+        });
+    }
+    
 }
 
 </script>
@@ -59,6 +98,10 @@ const register = async () => {
     padding: 1rem;
     text-align: center;
     color: var(--color-text);
+  }
+
+  h3 {
+      font-weight: bold;
   }
 
   .section-header p {

@@ -10,10 +10,12 @@
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Email</label>
                         <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="email">
+                        <div v-for="error in v$.email.$errors" :key="error.$uid" id="emailHelp" class="form-text text-danger">*{{error.$message}}</div>
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" v-model="password">
+                        <input type="password" class="form-control" id="exampleInputPassword1" aria-describedby="passHelp" v-model="password">
+                        <div v-for="error in v$.password.$errors" :key="error.$uid" id="passHelp" class="form-text text-danger">*{{error.$message}}</div>
                     </div>
                     <button type="submit" class="btn btn-primary">Sign in</button>
                     <div class="sub-text">
@@ -27,8 +29,12 @@
 
 <script>
 //this is options API
+import useVuelidate from '@vuelidate/core'
+import { email, required, minLength, helpers } from '@vuelidate/validators'
 import Form from '../component_layouts/form.vue'
+
 export default {
+    setup: () => ({ v$: useVuelidate() }),
     components: {
         Form
     },
@@ -39,17 +45,40 @@ export default {
         }
     },
 
+    validations(){
+        return {
+            email: { required: helpers.withMessage('This email cannot be empty', required), email },
+            password: { required: helpers.withMessage('This password cannot be empty', required), minLength: minLength(8) }
+        }
+    },
+
     methods: {
         async login() {
-            this.$swal.fire({
-                toast: true,
-                icon: 'success',
-                title: 'Login Succcess !',
-                showConfirmButton: false,
-                position: 'top-end',
-                timer: 2000,
-                timerProgressBar: true,
-            })
+            const res = await this.$store.dispatch('loginAuth')
+            console.log(this.$store.state.token);
+            console.log(res);
+            const result = await this.v$.$validate()
+            if(result){
+                this.$swal.fire({
+                    toast: true,
+                    icon: 'success',
+                    title: 'Login Succcess !',
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    timer: 2000,
+                    timerProgressBar: true,
+                })
+            }else {
+                this.$swal.fire({
+                    toast: true,
+                    icon: 'error',
+                    title: 'Login Failed !',
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    timer: 2000,
+                    timerProgressBar: true,
+                })
+            }
         }
     }
 }
@@ -60,6 +89,10 @@ export default {
     padding: 1rem;
     text-align: center;
     color: var(--color-text);
+  }
+
+  h3 {
+      font-weight: bold;
   }
 
   .section-header p {
