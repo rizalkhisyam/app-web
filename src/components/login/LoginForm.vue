@@ -5,6 +5,10 @@
                 <h3>Sign in</h3>
                 <p>Silahkan masuk menggunakan akun anda</p>
             </div>
+            <div v-if="alert" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>{{title}}</strong> {{message}}.
+                <button type="button" class="btn-close" @click="this.alert = false"></button>
+            </div>
             <div class="form-section">
                 <Form @formSubmit="login()">
                     <div class="mb-3">
@@ -17,7 +21,7 @@
                         <input type="password" class="form-control" id="exampleInputPassword1" aria-describedby="passHelp" v-model="password">
                         <div v-for="error in v$.password.$errors" :key="error.$uid" id="passHelp" class="form-text text-danger">*{{error.$message}}</div>
                     </div>
-                    <button type="submit" class="btn btn-primary">Sign in</button>
+                    <button type="submit" class="btn btn-primary"><span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sign in</button>
                     <div class="sub-text">
                         <p>Don't have account yet ? <router-link to="/register">Register</router-link></p>
                     </div>
@@ -32,6 +36,7 @@
 import useVuelidate from '@vuelidate/core'
 import { email, required, minLength, helpers } from '@vuelidate/validators'
 import Form from '../component_layouts/form.vue'
+import router from '@/router'
 
 export default {
     setup: () => ({ v$: useVuelidate() }),
@@ -41,7 +46,11 @@ export default {
     data(){
         return {
             email: '',
-            password: ''
+            password: '',
+            title: '',
+            message: '',
+            alert: false,
+            loading: false
         }
     },
 
@@ -54,20 +63,28 @@ export default {
 
     methods: {
         async login() {
-            const res = await this.$store.dispatch('loginAuth')
-            console.log(this.$store.state.token);
-            console.log(res);
             const result = await this.v$.$validate()
             if(result){
-                this.$swal.fire({
-                    toast: true,
-                    icon: 'success',
-                    title: 'Login Succcess !',
-                    showConfirmButton: false,
-                    position: 'top-end',
-                    timer: 2000,
-                    timerProgressBar: true,
-                })
+                this.loading = true
+                const res = await this.$store.dispatch('loginAuth', {email: this.email, password: this.password})
+                if(res.status == false){
+                    this.alert = true;
+                    this.title = 'Error!';
+                    this.message = res.message
+                    this.loading = false
+                }else {
+                    this.loading = false
+                    this.$swal.fire({
+                        toast: true,
+                        icon: 'success',
+                        title: 'Login Succcess !',
+                        showConfirmButton: false,
+                        position: 'top-end',
+                        timer: 2000,
+                        timerProgressBar: true,
+                    })
+                    router.push('/dashboard');
+                }
             }else {
                 this.$swal.fire({
                     toast: true,
@@ -111,5 +128,9 @@ export default {
 
   .sub-text {
       padding-top: 1rem;
+  }
+
+  .alert {
+      margin: 0 2rem 0 2rem;
   }
 </style>
