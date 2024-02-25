@@ -9,3 +9,13 @@ body {
     sans-serif !important;
     font-size: var(--font-size-12) !important;
 }
+
+.section-header {
+
+    .logo-apps {
+        padding: 1rem;
+        width: 30%;
+    }
+
+}
+

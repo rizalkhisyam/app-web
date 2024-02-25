@@ -2,6 +2,7 @@
     <div class="card"> 
         <div class="d-flex justify-content-center flex-column">
             <div class="section-header">
+                <img class="logo-apps" :src="logo" alt="logo-apps">
                 <h3>Sign in</h3>
                 <p>Silahkan masuk menggunakan akun anda</p>
             </div>
@@ -12,13 +13,16 @@
             <div class="form-section">
                 <Form @formSubmit="login()">
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" v-model="email">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" v-model="email">
                         <div v-for="error in v$.email.$errors" :key="error.$uid" id="emailHelp" class="form-text text-danger">*{{error.$message}}</div>
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" aria-describedby="passHelp" v-model="password">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="button-password">
+                            <input :type="btn_type == true ? 'password': 'text'" class="form-control" id="password" aria-describedby="passHelp" v-model="password">
+                            <font-awesome-icon :icon="['fa', btn_type == true ? 'fa-eye-slash': 'fa-eye']" class="side-eye" @click="btn_type=!btn_type"/>
+                        </div>
                         <div v-for="error in v$.password.$errors" :key="error.$uid" id="passHelp" class="form-text text-danger">*{{error.$message}}</div>
                     </div>
                     <button type="submit" class="btn btn-primary"><span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Sign in</button>
@@ -33,10 +37,12 @@
 
 <script>
 //this is options API
+import logo from '../../assets/logo-apps.svg'
 import useVuelidate from '@vuelidate/core'
 import { email, required, minLength, helpers } from '@vuelidate/validators'
 import Form from '../component_layouts/form.vue'
 import router from '@/router'
+
 
 export default {
     setup: () => ({ v$: useVuelidate() }),
@@ -50,7 +56,9 @@ export default {
             title: '',
             message: '',
             alert: false,
-            loading: false
+            loading: false,
+            btn_type: true,
+            logo: logo
         }
     },
 
@@ -133,4 +141,24 @@ export default {
   .alert {
       margin: 0 2rem 0 2rem;
   }
+
+  .button-password {
+    display: flex;
+    align-items: center;
+    position: relative;
+  }
+
+  .side-eye {
+    position: absolute;
+    margin-left: auto;
+    opacity: 90%;
+    right: 0.75rem;
+  }
+
+  .side-eye:hover {
+    cursor: pointer;
+    opacity: 60%;
+  }
+
+
 </style>

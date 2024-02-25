@@ -2,6 +2,7 @@
     <div class="card"> 
         <div class="d-flex justify-content-center flex-column">
             <div class="section-header">
+                <img class="logo-apps" :src="logo" alt="logo-apps">
                 <h3>Register</h3>
                 <p>Silahkan lengkapi data berikut untuk melakukan pendaftaran</p>
             </div>
@@ -23,12 +24,18 @@
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" aria-describedby="passHelp" v-model="formData.password">
+                        <div class="button-password">
+                            <input :type="btn_type == true ? 'password' : 'text'" class="form-control" id="password" aria-describedby="passHelp" v-model="formData.password">
+                            <font-awesome-icon class="side-eye" :icon="['fa', btn_type == true ? 'fa-eye-slash' : 'fa-eye']" @click="btn_type=!btn_type" />
+                        </div>
                         <div v-for="error in v$.password.$errors" :key="error.$uid" id="passHelp" class="form-text text-danger">*{{error.$message}}</div>
                     </div>
                     <div class="mb-3">
                         <label for="confirmPassword" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="confirmPassword" aria-describedby="cpassHelp" v-model="formData.confirmPassword">
+                        <div class="button-password">
+                            <input :type="btn_confirm_type == true ? 'password' : 'text'" class="form-control" id="confirmPassword" aria-describedby="cpassHelp" v-model="formData.confirmPassword">
+                            <font-awesome-icon class="side-eye" :icon="['fa', btn_confirm_type == true ? 'fa-eye-slash' : 'fa-eye']" @click="btn_confirm_type=!btn_confirm_type"/>
+                        </div>
                         <div v-for="error in v$.confirmPassword.$errors" :key="error.$uid" id="cpassHelp" class="form-text text-danger">*{{error.$message}}</div>
                     </div>
                     <button type="submit" class="btn btn-primary"><span v-if="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Register</button>
@@ -49,8 +56,11 @@ import useVuelidate from '@vuelidate/core'
 import { required, email, sameAs, minLength, helpers } from '@vuelidate/validators'
 import { useStore } from 'vuex'
 import router from '@/router'
+import logo from '../../assets/logo-apps.svg'
 
 const swal = inject('$swal');
+const btn_type = ref(true);
+const btn_confirm_type = ref(true);
 const formData = reactive({
     nama: '',
     email: '',
@@ -156,5 +166,22 @@ const register = async () => {
 
   .alert {
       margin: 0 2rem 0 2rem;
+  }
+
+  .button-password {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .side-eye{
+    position: absolute;
+    right: 0.75rem;
+    opacity: 90%;
+  }
+
+  .side-eye:hover {
+    opacity: 60%;
+    cursor: pointer;
   }
 </style>
