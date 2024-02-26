@@ -10,10 +10,10 @@ const store = createStore({
     },
 
     mutations: {
-        setToken(state, data){
+        SET_TOKEN(state, data){
             state.token = data;
         },
-        setUser(state, data){
+        SET_USER(state, data){
             state.user = data
         }
     },
@@ -41,7 +41,7 @@ const store = createStore({
                     },
                     data: fd
                 }).then((response) => {
-                    context.commit('setToken', response.data.data.token)
+                    context.commit('SET_TOKEN', response.data.data.token)
                     return response.data.data
                 })
 
@@ -73,7 +73,7 @@ const store = createStore({
                     },
                     data: fd
                 }).then((response) => {
-                    context.commit('setUser', response.data.data)
+                    context.commit('SET_USER', response.data.data)
                     return response.data.data;
                 })
 

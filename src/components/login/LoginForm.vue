@@ -43,7 +43,6 @@ import { email, required, minLength, helpers } from '@vuelidate/validators'
 import Form from '../component_layouts/form.vue'
 import router from '@/router'
 
-
 export default {
     setup: () => ({ v$: useVuelidate() }),
     components: {
