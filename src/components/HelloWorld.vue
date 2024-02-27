@@ -1,31 +1,17 @@
-<script setup>
-defineProps({
-  msg: {
-    type: String,
-    required: true
-  }
-})
-</script>
-
 <template>
-  <div class="greetings">
-    <h1 class="green">{{ msg }}</h1>
-    <h3>
-      You’ve successfully created a project with
-      <a href="https://vitejs.dev/" target="_blank" rel="noopener">{{message}}</a> +
-      <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
-    </h3>
+  <div>
+    <Navbar />
+  </div>
+  <div class="container mt-5">
+    <Main />
+    <router-view></router-view>
   </div>
 </template>
 
-<script>
-export default {
-  data(){
-    return {
-      message: "Vite"
-    }
-  }
-}
+<script setup>
+import Main from './dashboard/Main.vue'
+import Navbar from './component_layouts/navbar.vue'
+
 </script>
 
 <style scoped>

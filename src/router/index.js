@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import store from '@/stores'
+import jsCookie from 'js-cookie'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,18 +22,31 @@ const router = createRouter({
       component: () => import('../components/HelloWorld.vue'),
       meta: {
         requiresAuth: true
-      }
+      },
+      // children:[{
+      //   path: 'main',
+      //   name: 'main',
+      //   components: () => import('../components/dashboard/Main.vue'),
+      //   meta: {
+      //     requiresAuth: true
+      //   },
+      // }]
     }
   ]
 })
 
 router.beforeEach((to, from) => {
+  const token = jsCookie.get('TOKEN')
   if(to.meta.requiresAuth == true){
-    if(store.state.token == ''){
+    if(token == undefined){
       return { name: 'login' }
     }else {
-      return next();
+      return true;
     }
+  }
+
+  if(to.name == 'login' && token !==undefined){
+    return { name: 'dashboard' }
   }
 
   if(to.name == null){

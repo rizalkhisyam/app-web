@@ -90,7 +90,7 @@ export default {
                         timer: 2000,
                         timerProgressBar: true,
                     })
-                    router.push('/dashboard');
+                    router.push({name: 'dashboard'});
                 }
             }else {
                 this.$swal.fire({

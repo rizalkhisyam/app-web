@@ -1,5 +1,9 @@
 import { createStore } from "vuex";
 import axios from "axios";
+import jsCookie from "js-cookie";
+
+//vuex-store
+import Products from './product.js'
 
 const store = createStore({
     state() {
@@ -15,7 +19,7 @@ const store = createStore({
         },
         SET_USER(state, data){
             state.user = data
-        }
+        },
     },
 
     getters: {
@@ -24,7 +28,7 @@ const store = createStore({
         },
         user(state){
             return state.user;
-        }
+        },
     },
 
     actions: {
@@ -33,15 +37,17 @@ const store = createStore({
             fd.append('email', payload.email)
             fd.append('password', payload.password)
             try {
+                await axios.get('/sanctum/csrf-cookie')
                 const res = await axios({
                     method: 'POST',
-                    url: `http://127.0.0.1:8000/api/login`,
+                    url: `/api/login`,
                     headers: {
-                        Accept: 'application/json'
+                        'Accept': 'application/json'
                     },
                     data: fd
                 }).then((response) => {
                     context.commit('SET_TOKEN', response.data.data.token)
+                    jsCookie.set('TOKEN', response.data.data.token)
                     return response.data.data
                 })
 
@@ -51,6 +57,7 @@ const store = createStore({
                 }
 
             } catch (error) {
+                console.log(error);
                 return {
                     status: false,
                     message: error.response.data.message
@@ -67,9 +74,9 @@ const store = createStore({
             try {
                 const res = await axios({
                     method: 'POST',
-                    url: `http://127.0.0.1:8000/api/register`,
+                    url: `/api/register`,
                     headers: {
-                        Accept: 'application/json'
+                        'Accept': 'application/json'
                     },
                     data: fd
                 }).then((response) => {
@@ -89,6 +96,9 @@ const store = createStore({
                 }
             }
         }
+    },
+    modules: {
+        product: Products
     }
 })
 
