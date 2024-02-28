@@ -17,7 +17,7 @@
                 <ul class="dropdown-menu text-small" aria-labelledby="dropdownUser1">
                     <li><a class="dropdown-item" href="#">Profile</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="#">Sign out</a></li>
+                    <li @click="logout"><a class="dropdown-item" href="#">Sign out</a></li>
                 </ul>
                 </div>
             </div>
@@ -27,8 +27,17 @@
 </template>
 
 <script setup>
+import { useStore } from 'vuex'
 import logo from '../../assets/logo-apps.svg'
+import router from '@/router'
 
+const store = useStore()
+
+const logout = async () => {
+    console.log('clicked');
+    await store.dispatch('logout')
+    router.push('/');
+}
 
 </script>
 

@@ -9,13 +9,13 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './stores'
-import { faEye, faEyeSlash, faHome } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faArrowRight, faEdit, faEye, faEyeSlash, faHome, faMagnifyingGlass, faTrash } from '@fortawesome/free-solid-svg-icons'
 import axios from 'axios'
 
 axios.defaults.withCredentials=true;
 axios.defaults.baseURL='http://127.0.0.1:8000'
 
-library.add(faEye, faEyeSlash, faHome)
+library.add(faEye, faEyeSlash, faHome, faMagnifyingGlass, faTrash, faEdit, faArrowLeft, faArrowRight)
 
 const app = createApp(App)
 

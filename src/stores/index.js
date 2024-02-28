@@ -65,6 +65,10 @@ const store = createStore({
             }
         },
 
+        async logout(context){
+            jsCookie.remove('TOKEN')
+        },
+
         async registerUser(context, payload){
             const fd = new FormData()
             fd.append('name', payload.name)
