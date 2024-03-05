@@ -1,35 +1,16 @@
-<script setup>
-import Login from '../components/login/LoginForm.vue'
-</script>
-
 <template>
   <main>
+    <Navbar />
     <div class="container">
-      <div class="row box-web">
-        <div class="col-lg-4">
-          <Login />
-        </div>
-      </div>
+      <router-view></router-view>
     </div>
   </main>
 </template>
 
+<script setup>
+import Navbar from '../components/component_layouts/navbar.vue'
+</script>
+
 <style scoped>
-  .box-web {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
 
-  .section-header {
-    padding: 1rem;
-    text-align: center;
-    color: var(--color-text);
-  }
-
-  .section-header p {
-    font-size: 0.875rem;
-    font-weight: 300;
-  }
 </style>

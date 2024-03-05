@@ -1,43 +1,5 @@
 <template>
     <section class="intro">
-        <div class="bg-image h-100 mb-5">
-            <div class="mask d-flex align-items-center h-100">
-                <div class="container">
-                    <h4>Category</h4>
-                    <div class="row justify-content-center">
-                    <div class="col-12">
-                        <div class="card shadow-2-strong" style="background-color: #f5f7fa;">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                            <table class="table table-borderless mb-0">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Category ID</th>
-                                    <th scope="col">Category Name</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                                </thead>
-                                <tbody v-for="data in categories" :key="data.id">
-                                <tr>
-                                    <td>{{data.id}}</td>
-                                    <td>{{data.category_name}}</td>
-                                    <td>{{data.price}}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-sm px-3">
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="bg-image h-100">
             <div class="mask d-flex align-items-center h-100">
                 <div class="container">
@@ -104,7 +66,7 @@
                                         <button type="button" class="btn btn-danger btn-sm px-2" @click="deleteData(data.id, data.name)">
                                             <font-awesome-icon :icon="['fa', 'fa-trash']" />
                                         </button>
-                                        <button type="button" class="btn btn-primary btn-sm px-2">
+                                        <button type="button" class="btn btn-info btn-sm px-2">
                                             <font-awesome-icon :icon="['fa', 'fa-edit']" />
                                         </button>
                                     </td>
@@ -164,9 +126,9 @@
 <script setup>
 import useVuelidate from "@vuelidate/core";
 import { helpers, required, numeric } from "@vuelidate/validators";
-import { computed, inject, onMounted, reactive, ref, watch } from "vue";
+import { computed, inject, onBeforeMount, onErrorCaptured, onMounted, reactive, ref, watch } from "vue";
 import { useStore } from "vuex";
-import  Form from '../component_layouts/form.vue'
+import Form from '../component_layouts/form.vue'
 
 const store = useStore()
 const swal = inject('$swal')
@@ -217,7 +179,6 @@ const v$ = useVuelidate(rules, formData);
 const loading = ref(false)
 
 const deleteData = async (id, name) => {
-    console.log(id);
     swal.fire({
         icon: 'warning',
         title: 'Delete product',
@@ -281,19 +242,6 @@ const create = async () => {
     }
 }
 
-onMounted(async () => {
-    await getDataProducts(dataTable)
-    await getDataCategory()
-})
-
-watch(
-  dataTable,
-  async () => {
-    await getDataProducts(dataTable)
-  },
-  { immediate: true }
-)
-
 const products = computed(() => {
     return store.getters.products
 })
@@ -320,12 +268,27 @@ const categories = computed(() => {
 })
 
 const getDataProducts = async (params) => {
-    await store.dispatch('getDataProducts', params)
+    return await store.dispatch('getDataProducts', params)
 }
 
+watch(
+  dataTable,
+  async () => {
+    await getDataProducts(dataTable)
+  },
+  { immediate: true }
+)
+
 const getDataCategory = async () => {
-    await store.dispatch('getDataCategories')
+    return await store.dispatch('getDataCategories')
 }
+
+onErrorCaptured((error) => {
+    console.log("test"+error)
+})
+
+await getDataProducts(dataTable)
+await getDataCategory()
 
 </script>
 

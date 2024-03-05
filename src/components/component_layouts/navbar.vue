@@ -5,9 +5,9 @@
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                 <img class="logo-apps" :src="logo" alt="logo-apps">
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="#" class="nav-link px-2 link-secondary">Overview</a></li>
-                <li><a href="#" class="nav-link px-2 link-dark">Inventory</a></li>
-                <li><a href="#" class="nav-link px-2 link-dark">Products</a></li>
+                <li><router-link to="/dashboard" class="nav-link px-2 link-secondary">Overview</router-link></li>
+                <li><router-link to="/dashboard/categories" class="nav-link px-2 link-dark">Category</router-link></li>
+                <li><router-link to="/dashboard/products" class="nav-link px-2 link-dark">Products</router-link></li>
                 </ul>
 
                 <div class="dropdown text-end">
@@ -34,7 +34,6 @@ import router from '@/router'
 const store = useStore()
 
 const logout = async () => {
-    console.log('clicked');
     await store.dispatch('logout')
     router.push('/');
 }

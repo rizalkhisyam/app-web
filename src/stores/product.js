@@ -106,19 +106,20 @@ const store = {
 
         async deleteDataProduct(context, payload){
             try {
-                const data = {
+                const data = QueryString.stringify({
                     id: payload
-                }
+                })
                 const token = jsCookie.get('TOKEN')
                 const res = await axios({
                     method: 'DELETE',
                     url: `/api/products`,
                     headers: {
                         'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/json',
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Access-Control-Allow-Origin': '*',
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
-                    data: QueryString.stringify(data)
+                    data: data
                 }).then((response) => {
                     return response.data
                 })
@@ -129,7 +130,10 @@ const store = {
                 }
 
             } catch (error) {
-                console.log(error);
+                console.log({
+                    code: error.code,
+                    message: error.message
+                });
                 return {
                     status: false,
                     message: error.response.data.message

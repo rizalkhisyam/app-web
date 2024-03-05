@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import LoginView from '../views/LoginView.vue'
 import HomeView from '../views/HomeView.vue'
-import store from '@/stores'
+import ProductView from '../components/ProductView.vue'
+import CategoryView from '../components/CategoryView.vue'
 import jsCookie from 'js-cookie'
 
 const router = createRouter({
@@ -9,7 +11,7 @@ const router = createRouter({
     {
       path: '/',
       name: 'login',
-      component: HomeView
+      component: LoginView
     },
     {
       path: '/register',
@@ -19,19 +21,31 @@ const router = createRouter({
     {
       path: '/dashboard',
       name: 'dashboard',
-      component: () => import('../components/HelloWorld.vue'),
+      component: HomeView,
       meta: {
         requiresAuth: true
       },
-      // children:[{
-      //   path: 'main',
-      //   name: 'main',
-      //   components: () => import('../components/dashboard/Main.vue'),
-      //   meta: {
-      //     requiresAuth: true
-      //   },
-      // }]
-    }
+      children:[
+        {
+          path: 'products',
+          name: 'products',
+          component: ProductView,
+          meta: {
+            requiresAuth: true
+          },
+        },
+
+        {
+          path: 'categories',
+          name: 'category',
+          component: CategoryView,
+          meta: {
+            requiresAuth: true
+          },
+        }
+      ]
+    },
+    
   ]
 })
 
