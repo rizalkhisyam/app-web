@@ -3,7 +3,7 @@
         <div class="bg-image h-100">
             <div class="mask d-flex align-items-center h-100">
                 <div class="container">
-                    <h4>Category</h4>
+                    <h6>Category</h6>
                     <div class="mt-5 row justify-content-center">
                     <div class="col-12">
                         <div class="card shadow-2-strong" style="background-color: #f5f7fa;">

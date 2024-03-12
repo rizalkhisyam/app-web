@@ -3,7 +3,7 @@
         <div class="bg-image h-100">
             <div class="mask d-flex align-items-center h-100">
                 <div class="container">
-                    <h4>Table Products</h4>
+                    <h6>Table Products</h6>
                     <div class="mt-5 d-flex justify-content-between mb-2">
                         <div class="d-flex gap-2">
                             <select class="form-select" aria-label="Default select example" v-model="dataTable.limit">
@@ -90,7 +90,7 @@
             </div>
             <hr>
             <div class="container mt-5">
-                <h4>Add Data Product</h4>
+                <h6>Add Data Product</h6>
                 <Form class="mt-5 row mb-5" @formSubmit="create()">
                     <div class="col-6 mb-3">
                         <label for="name" class="form-label">Product Name</label>
